@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>test</title>
+    <link href="../shared/css/bootstrap.min.css" rel="stylesheet" type="text/css">
+    <script type="text/javascript" src="../shared/js/angular.min.js"></script>
+    <script type="text/javascript" src="../shared/js/jquery.min.js"></script>
+    <script type="text/javascript" src="../shared/js/bootstrap.min.js"></script>
+
+    <style>
+        .enSelected{
+            position:relative;width: 100px;height: 100px;background:#b4ecf3
+        ;left:50px;
+        }
+        .unSelected{
+            position:relative;width: 100px;height: 100px;background:grey;
+        ;left:50px;
+        }
+        .circle{
+            width:50px; height:50px; background-color:green; border-radius:25px;
+        }
+        .rect{
+            position:relative;float:left;width: 400px;height: 10px;background:gainsboro;top: 20px;
+        }
+    </style>
+</head>
+<body ng-app="myApp" ng-controller="myController">
+<h4>主页|新建数据生产任务</h4>
+<hr>
+<div ng-show="!flag">
+    <div style="position:relative;margin:0px auto; width:500px;height: 50px;top:10px">
+        <span style=" float:left;">选择服务/流程</span>
+        <span style=" float:right;"> 设置输入的参数和数据</span>
+    </div>
+    <div style="position:relative;margin:0px auto; width:500px;height: 50px;top:10px">
+        <div style=" float:left;" class="circle">
+            <span style="height:50px; line-height:50px; display:block; color:#FFF; text-align:center">1</span>
+        </div>
+
+        <div class="rect"></div>
+
+        <div class="circle" style="float:right;background-color:gainsboro;">
+            <span style="height:50px; line-height:50px; display:block; color:#FFF; text-align:center">2</span>
+        </div>
+    </div>
+    <br><br><br>
+    <div class="panel panel-default" style="position:relative;left: 50px;">
+        <div class="panel-heading">
+            <h4>
+                1.选择服务/流程
+
+                <button type="button" class="btn btn-primary" style="position:absolute;right:200px;" ng-click="flag=true" ng-disabled="operationFlag">
+                    下一步
+                </button>
+
+            </h4>
+        </div>
+        <div class="panel-body">
+            已选择：{{nowService.name}}
+        </div>
+    </div>
+    <ul class="nav nav-tabs" style="position: relative;left: 50px;">
+        <li class="active"><a href="#">服务</a></li>
+        <li><a href="#">流程</a></li>
+    </ul>
+    <ul class="list-unstyled list-inline">
+        <li ng-repeat="service in services">
+            <div ng-click="service.flag ||GetOperations('../metadata/'+service.name,service)" ng-class="service.style">
+                <h6 style="text-align:center;">{{service.name}}</h6>
+            </div>
+        </li>
+    </ul>
+</div>
+
+<div ng-show="flag">
+    <div style="position:relative;margin:0px auto; width:500px;height: 50px;top:10px">
+        <span style=" float:left;">选择服务/流程</span>
+        <span style=" float:right;"> 设置输入的参数和数据</span>
+    </div>
+    <div style="position:relative;margin:0px auto; width:500px;height: 50px;top:10px">
+        <div class="circle" style=" float:left">
+            <span style="height:50px; line-height:50px; display:block; color:#FFF; text-align:center">1</span>
+        </div>
+
+        <div class="rect" style=" background:green;"></div>
+
+        <div class="circle" style="float:right;">
+            <span style="height:50px; line-height:50px; display:block; color:#FFF; text-align:center">2</span>
+        </div>
+    </div>
+    <br><br><br>
+    <h4 style="position: relative;left: 50px;">2.请输入数据和参数</h4>
+    <br><br>
+    请选择方法：<select ng-model="nowOperation" ng-change="Init()" ng-options="s.path for s in operatios">
+</select>
+    <p>方法简介： {{nowOperation.summary}}</p>
+    <div style="position: relative;left: 50px">请输入参数：</div>
+    <div class="well">
+        <ul>
+            <li ng-repeat="pathVariable in nowOperation.params.path">
+                {{pathVariable.name}}<input type="text" ng-model="inputValue.path[pathVariable.name]">{{pathVariable.type}}
+            </li>
+        </ul>
+        <ul>
+            <li ng-repeat="queryVariable in nowOperation.params.query">
+                {{queryVariable.name}}<input type="text" ng-model="inputValue.query[queryVariable.name]">{{queryVariable.type}}
+            </li>
+        </ul>
+        <ul>
+            <li ng-repeat="bodyVariable in nowOperation.params.body">
+                {{bodyVariable.name}}<input type="text" ng-model="inputValue.body">json
+            </li>
+        </ul>
+        <button type="button" class="btn btn-default" ng-click="nowOperation.Fun()">运行</button>
+    </div>
+    {{Data}}
+    <br>
+    {{message}}
+</div>
+<script src="js/JsonParse.js"></script>
+</body>
+</html>
